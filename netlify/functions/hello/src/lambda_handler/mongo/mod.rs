@@ -18,9 +18,9 @@ pub async fn get_floorboards_collection(db_name:&str, collection_name:&str)  -> 
     let mut cursor = typed_collection.find(None, None).await?;
 
     // Iterate over the results of the cursor.
-    while let Some(floorboard) = cursor.try_next().await? {
-        println!("label: {}", floorboard.label);
-    }
+    // while let Some(floorboard) = cursor.try_next().await? {
+    //     println!("label: {}", floorboard.label);
+    // }
 
     Ok(())
 }
