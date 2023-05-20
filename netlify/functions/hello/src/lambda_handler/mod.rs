@@ -18,10 +18,6 @@ pub async fn start_listening() -> Result<(), Error> {
 pub(crate) async fn lambda_handler(event: ApiGatewayProxyRequest, _ctx: Context) -> Result<ApiGatewayProxyResponse, Error> {
     let password = env::var("AUTHENTICATION_PASSWORD").expect("AUTHENTICATION_PASSWORD is not set.");
 
-    println!("Headers have password?...");
-    assert!(event.headers.contains_key("password"));
-    println!("Headers have password!!!");
-
     // Good response
     let resp = ApiGatewayProxyResponse {
         status_code: 200,
@@ -36,6 +32,7 @@ pub(crate) async fn lambda_handler(event: ApiGatewayProxyRequest, _ctx: Context)
 
     // If password no match, bad response!
     if provided_password != Some(&HeaderValue::from_str(&password)?) {
+        println!("Password was not correct :'(");
         let bad_resp = ApiGatewayProxyResponse {
             status_code: 401,
             headers: HeaderMap::new(),
