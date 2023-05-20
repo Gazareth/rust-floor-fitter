@@ -28,13 +28,16 @@ pub async fn get_floorboards_collection(db_name:&str, collection_name:&str)  -> 
 pub async fn get_database(db_name:&str) -> mongodb::error::Result<Database> {
     let uri = env::var("MONGODB_CONNECTION_URI").expect("MONGODB_CONNECTION_URI must be set.");
     let mut client_options =
-        ClientOptions::parse(uri)
+        ClientOptions::parse(uri.clone())
             .await?;
+
     // Set the server_api field of the client_options object to Stable API version 1
     let server_api = ServerApi::builder().version(ServerApiVersion::V1).build();
     client_options.server_api = Some(server_api);
+    println!("Attempting to create client for db: {}", uri);
     // Create a new client and connect to the server
     let client = Client::with_options(client_options)?;
+    println!("Attempting ping on db: {}", uri);
     // Send a ping to confirm a successful connection
     client
         .database("admin")
